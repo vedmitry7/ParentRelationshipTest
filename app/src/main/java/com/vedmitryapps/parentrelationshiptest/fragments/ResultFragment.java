@@ -3,22 +3,32 @@ package com.vedmitryapps.parentrelationshiptest.fragments;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.vedmitryapps.parentrelationshiptest.R;
+import com.vedmitryapps.parentrelationshiptest.fragments.adapters.ResultAdapter;
+
 
 public class ResultFragment extends Fragment {
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.question_fragment_view, container, false);
-        String question = getArguments().getString("args");
-        TextView textView = view.findViewById(R.id.question);
-        textView.setText(question);
+        View view = inflater.inflate(R.layout.result_fragment, container, false);
+
+
+        ResultAdapter adapter = new ResultAdapter(getActivity().getApplicationContext(), this.getArguments().getIntArray("result"));
+        ViewPager viewPager = view.findViewById(R.id.resultViewPager);
+        viewPager.setAdapter(adapter);
+
+        TabLayout tabLayout = view.findViewById(R.id.resultTab);
+        tabLayout.setupWithViewPager(viewPager);
+
         return view;
     }
 }

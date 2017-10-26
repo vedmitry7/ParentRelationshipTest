@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingTop="16dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEEEEE"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:paddingRight="16dp"
+            android:paddingLeft="16dp"
+            android:id="@+id/name"
+            android:alpha="0.54"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            android:text="@string/acceptance"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
+            android:layout_marginTop="16dp"
+            android:id="@+id/progressBar"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            app:rcProgress="7"
+            app:rcSecondaryProgress="12"
+            app:rcMax="12"
+            app:rcRadius="12dp"
+            app:rcBackgroundPadding="1dp"
+            app:rcReverse="false"
+            app:rcProgressColor="#00ff00"
+            app:rcSecondaryProgressColor="#ffff00"
+            app:rcBackgroundColor="#000000" />
+
+        <TextView
+            android:paddingRight="16dp"
+            android:paddingLeft="16dp"
+            android:id="@+id/result"
+            android:padding="10dp"
+            android:alpha="0.54"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:text="Ваш результат - 16 из 26 баллов"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+
+        <com.vedmitryapps.parentrelationshiptest.views.JustifiedTextView
+            android:alpha="0.54"
+            android:id="@+id/desc1"
+            android:paddingTop="10dp"
+            android:paddingRight="16dp"
+            android:paddingLeft="16dp"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            noghteh:textColor="#000000"
+            noghteh:textSize="16sp"
+            xmlns:noghteh="http://noghteh.ir"/>
+
+
+        <com.vedmitryapps.parentrelationshiptest.views.JustifiedTextView
+            android:alpha="0.54"
+            android:paddingRight="16dp"
+            android:paddingLeft="16dp"
+            android:paddingHorizontal="10dp"
+            android:id="@+id/desc2"
+            android:paddingTop="10dp"
+
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            noghteh:textColor="#000000"
+            noghteh:textSize="16sp"
+            xmlns:noghteh="http://noghteh.ir"/>
+
+
+
+
+
+    </LinearLayout>
+
+
+
+</ScrollView>
