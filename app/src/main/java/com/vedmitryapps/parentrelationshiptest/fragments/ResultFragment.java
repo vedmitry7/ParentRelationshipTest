@@ -26,9 +26,24 @@ public class ResultFragment extends Fragment {
         ViewPager viewPager = view.findViewById(R.id.resultViewPager);
         viewPager.setAdapter(adapter);
 
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         TabLayout tabLayout = view.findViewById(R.id.resultTab);
         tabLayout.setupWithViewPager(viewPager);
-
         return view;
     }
 }

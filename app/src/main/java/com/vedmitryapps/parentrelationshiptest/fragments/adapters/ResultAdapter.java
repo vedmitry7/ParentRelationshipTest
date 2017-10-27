@@ -2,14 +2,15 @@ package com.vedmitryapps.parentrelationshiptest.fragments.adapters;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
-import com.vedmitryapps.parentrelationshiptest.views.JustifiedTextView;
 import com.vedmitryapps.parentrelationshiptest.R;
 
 public class ResultAdapter extends PagerAdapter {
@@ -32,9 +33,13 @@ public class ResultAdapter extends PagerAdapter {
 
         TextView name = view.findViewById(R.id.name);
         TextView result = view.findViewById(R.id.result);
-        JustifiedTextView desc1 = view.findViewById(R.id.desc1);
-        JustifiedTextView desc2 = view.findViewById(R.id.desc2);
         RoundCornerProgressBar progress = view.findViewById(R.id.progressBar);
+
+        WebView webViewDesc = view.findViewById(R.id.description);
+        webViewDesc.setBackgroundColor(Color.TRANSPARENT);
+
+        WebView webView = view.findViewById(R.id.webViewShortDesc);
+        webView.setBackgroundColor(Color.TRANSPARENT);
 
         switch (position){
             case 0:
@@ -43,8 +48,10 @@ public class ResultAdapter extends PagerAdapter {
                 progress.setMax(33);
                 progress.setSecondaryProgress(33);
                 progress.setProgress(this.result[0]);
-                desc1.setText(context.getString(R.string.acceptance_description_1));
-                desc2.setText(context.getString(R.string.acceptance_description_2));
+                webView.loadData(toHtmlString(context.getString(R.string.acceptance_description)),
+                        "text/html; charset=utf-8", "utf-8");
+                webViewDesc.loadData(toHtmlString(context.getString(R.string.acceptance_description_1)),
+                        "text/html; charset=utf-8", "utf-8");
                 break;
             case 1:
                 name.setText(context.getString(R.string.cooperation));
@@ -52,8 +59,10 @@ public class ResultAdapter extends PagerAdapter {
                 progress.setMax(8);
                 progress.setSecondaryProgress(8);
                 progress.setProgress(this.result[1]);
-                desc1.setText(context.getString(R.string.cooperation_description_1));
-                desc2.setText(context.getString(R.string.cooperation_description_2));
+                webView.loadData(toHtmlString(context.getString(R.string.cooperation_description)),
+                        "text/html; charset=utf-8", "utf-8");
+                webViewDesc.loadData(toHtmlString(context.getString(R.string.cooperation_description_1)),
+                        "text/html; charset=utf-8", "utf-8");
                 break;
             case 2:
                 name.setText(context.getString(R.string.symbiosis));
@@ -61,8 +70,10 @@ public class ResultAdapter extends PagerAdapter {
                 progress.setMax(7);
                 progress.setSecondaryProgress(7);
                 progress.setProgress(this.result[2]);
-                desc1.setText(context.getString(R.string.symbiosis_description_1));
-                desc2.setText(context.getString(R.string.symbiosis_description_2));
+                webView.loadData(toHtmlString(context.getString(R.string.symbiosis_description)),
+                        "text/html; charset=utf-8", "utf-8");
+                webViewDesc.loadData(toHtmlString(context.getString(R.string.symbiosis_description_1)),
+                        "text/html; charset=utf-8", "utf-8");
                 break;
             case 3:
                 name.setText(context.getString(R.string.control));
@@ -70,8 +81,10 @@ public class ResultAdapter extends PagerAdapter {
                 progress.setMax(7);
                 progress.setSecondaryProgress(7);
                 progress.setProgress(this.result[3]);
-                desc1.setText(context.getString(R.string.control_description_1));
-                desc2.setText(context.getString(R.string.control_description_2));
+                webView.loadData(toHtmlString(context.getString(R.string.control_description)),
+                        "text/html; charset=utf-8", "utf-8");
+                webViewDesc.loadData(toHtmlString(context.getString(R.string.control_description_1)),
+                        "text/html; charset=utf-8", "utf-8");
                 break;
             case 4:
                 name.setText(context.getString(R.string.failures));
@@ -79,8 +92,10 @@ public class ResultAdapter extends PagerAdapter {
                 progress.setMax(7);
                 progress.setSecondaryProgress(7);
                 progress.setProgress(this.result[4]);
-                desc1.setText(context.getString(R.string.failures_description_1));
-                desc2.setText(context.getString(R.string.failures_description_2));
+                webView.loadData(toHtmlString(context.getString(R.string.failures_description)),
+                        "text/html; charset=utf-8", "utf-8");
+                webViewDesc.loadData(toHtmlString(context.getString(R.string.failures_description_1)),
+                        "text/html; charset=utf-8", "utf-8");
                 break;
         }
 
@@ -102,6 +117,15 @@ public class ResultAdapter extends PagerAdapter {
     @Override
     public void destroyItem(ViewGroup viewGroup, int position, Object view) {
         viewGroup.removeView((View) view);
+    }
+
+    private String toHtmlString(String s){
+
+        String stringStart = "<body style=\"text-align:justify; line-height: 180%; color:black; opacity:0.78; background-color:#00000000;\">";
+        String stringEnd =  "</body>";
+
+        return stringStart + s + stringEnd;
+
     }
 
 }

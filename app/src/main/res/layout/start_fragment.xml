@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingTop="16dp"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:trianglify="http://schemas.android.com/apk/res-auto"
     android:scrollbars="none">
 
     <LinearLayout
@@ -20,18 +21,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <com.vedmitryapps.parentrelationshiptest.views.JustifiedTextView
-            android:alpha="0.54"
-            android:textSize="16dp"
+        <WebView
             android:id="@+id/test_description"
-            android:paddingTop="10dp"
-            android:paddingRight="16dp"
-            android:paddingLeft="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            noghteh:textColor="#000000"
-            noghteh:textSize="16sp"
-            xmlns:noghteh="http://noghteh.ir"/>
+            android:layout_height="wrap_content"/>
 
 
         <Button
@@ -45,10 +38,10 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"/>
 
-        <com.manolovn.trianglify.TrianglifyView
+       <!-- <com.manolovn.trianglify.TrianglifyView
             android:id="@+id/trianglify_view_sample"
             android:layout_width="match_parent"
-            android:layout_height="150dp"/>
+            android:layout_height="150dp"/>-->
 
     </LinearLayout>
 

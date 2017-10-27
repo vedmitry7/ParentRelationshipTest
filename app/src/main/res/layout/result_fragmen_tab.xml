@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:paddingTop="16dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EEEEEE"
+    android:background="@android:color/transparent"
     android:scrollbars="none">
 
     <LinearLayout
@@ -14,6 +13,7 @@
         android:layout_height="match_parent">
 
         <TextView
+            android:paddingTop="16dp"
             android:paddingRight="16dp"
             android:paddingLeft="16dp"
             android:id="@+id/name"
@@ -24,6 +24,11 @@
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <WebView
+            android:id="@+id/webViewShortDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
             android:layout_marginTop="16dp"
@@ -38,56 +43,27 @@
             app:rcRadius="12dp"
             app:rcBackgroundPadding="1dp"
             app:rcReverse="false"
-            app:rcProgressColor="#00ff00"
-            app:rcSecondaryProgressColor="#ffff00"
+            app:rcProgressColor="#009900"
+            app:rcSecondaryProgressColor="#CCCCCC"
             app:rcBackgroundColor="#000000" />
 
         <TextView
+            android:gravity="center"
             android:paddingRight="16dp"
             android:paddingLeft="16dp"
             android:id="@+id/result"
             android:padding="10dp"
-            android:alpha="0.54"
+            android:alpha="0.78"
             android:textColor="@android:color/black"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:text="Ваш результат - 16 из 26 баллов"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-
-
-        <com.vedmitryapps.parentrelationshiptest.views.JustifiedTextView
-            android:alpha="0.54"
-            android:id="@+id/desc1"
-            android:paddingTop="10dp"
-            android:paddingRight="16dp"
-            android:paddingLeft="16dp"
-            android:textSize="16sp"
+        <WebView
+            android:id="@+id/description"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            noghteh:textColor="#000000"
-            noghteh:textSize="16sp"
-            xmlns:noghteh="http://noghteh.ir"/>
-
-
-        <com.vedmitryapps.parentrelationshiptest.views.JustifiedTextView
-            android:alpha="0.54"
-            android:paddingRight="16dp"
-            android:paddingLeft="16dp"
-            android:paddingHorizontal="10dp"
-            android:id="@+id/desc2"
-            android:paddingTop="10dp"
-
-            android:textSize="16sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            noghteh:textColor="#000000"
-            noghteh:textSize="16sp"
-            xmlns:noghteh="http://noghteh.ir"/>
-
-
-
-
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
