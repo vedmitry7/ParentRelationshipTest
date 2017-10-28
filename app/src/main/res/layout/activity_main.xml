@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.vedmitryapps.parentrelationshiptest.activities.MainActivity"
-    android:background="@drawable/fragment_bg"
-    android:paddingTop="16dp"
-    >
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context="com.vedmitryapps.parentrelationshiptest.activities.MainActivity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/fragment_bg"
+        android:paddingTop="16dp"
+
+        >
 
         <TextView
             android:paddingTop="6dp"
@@ -22,46 +23,52 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/main_layout"
+            android:layout_weight="2"
+            >
+        </RelativeLayout>
 
+        <android.support.design.widget.CoordinatorLayout
+            android:visibility="gone"
+            android:layout_weight="1"
+            android:id="@+id/buttons"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/main_layout"
-        android:layout_weight="1"
-        >
-    </RelativeLayout>
+            <LinearLayout
+                app:layout_behavior="com.vedmitryapps.parentrelationshiptest.Behavior"
+                android:background="#00000000"
+                android:paddingTop="16dp"
+                android:gravity="center|bottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingBottom="50dp">
 
-    <LinearLayout
-        android:visibility="gone"
-        android:id="@+id/buttons"
-        android:background="#00000000"
-        android:paddingTop="16dp"
-        android:layout_weight="3"
-        android:gravity="center_horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+                <Button
+                    android:id="@+id/posBtn"
+                    android:layout_marginRight="25dp"
+                    android:background="@drawable/button_shape"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:onClick="onClick"
+                    android:text="Да"/>
+                <Button
+                    android:layout_marginLeft="25dp"
+                    android:background="@drawable/button_shape"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:onClick="onClick"
+                    android:text="Нет"/>
 
-        <Button
-            android:id="@+id/posBtn"
-            android:layout_marginRight="25dp"
-            android:background="@drawable/button_shape"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:onClick="onClick"
-            android:text="Да"/>
-        <Button
-            android:layout_marginLeft="25dp"
-            android:background="@drawable/button_shape"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:onClick="onClick"
-            android:text="Нет"/>
+            </LinearLayout>
+        </android.support.design.widget.CoordinatorLayout>
 
     </LinearLayout>
-
-
-</LinearLayout>

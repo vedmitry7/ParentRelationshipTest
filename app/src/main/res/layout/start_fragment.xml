@@ -28,12 +28,26 @@
 
 
         <Button
+            android:id="@+id/btnStart"
             android:textSize="16dp"
-            android:onClick="startTest"
+            android:onClick="startTesting"
             android:layout_gravity="center"
             android:background="@drawable/button_shape"
-            android:text="Начать"
-            android:pointerIcon="alias"
+            android:padding="10dp"
+            android:text="@string/start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"/>
+
+
+        <Button
+            android:id="@+id/btnResume"
+            android:textSize="16dp"
+            android:onClick="startTesting"
+            android:layout_gravity="center"
+            android:background="@drawable/button_shape"
+            android:padding="10dp"
+            android:text="@string/continue_test"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"/>
