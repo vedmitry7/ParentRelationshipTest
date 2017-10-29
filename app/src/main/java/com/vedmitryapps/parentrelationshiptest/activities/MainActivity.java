@@ -6,15 +6,12 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
@@ -47,11 +44,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+  /*      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window w = getWindow();
             w.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
             w.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
+        }*/
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.i("TAG21", "onCreate" );
@@ -107,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 mas[position] = true;
         }
         position++;
-        if(position == 61){
+        if(position == 3){
             Log.i("TAG21", "finish" );
             showResult();
             return;
@@ -141,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         if(buttons.getVisibility()==View.GONE){
             showButtons();
         }
-        count.setText(String.valueOf(position+1)+"/"+"61");
+        count.setText("Вопрос " + String.valueOf(position+1)+" из 61");
 
         Fragment fragment = QuestionFragment.newInstance(questions.get(position));
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -199,7 +196,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-
         state = State.RESULT;
 
         int[] result = {acceptanceResult, cooperationResult, symbiosisResult, controlResult, failuresResult};
@@ -220,18 +216,26 @@ public class MainActivity extends AppCompatActivity {
 
     private void showButtons() {
         buttons.setVisibility(View.VISIBLE);
-        buttons.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_left));
+        buttons.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_from_bottom));
 
         count.setVisibility(View.VISIBLE);
-        count.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_in_left));
+        count.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_from_top));
     }
 
     private void hideButtons(){
         buttons.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_down));
         buttons.setVisibility(View.GONE);
 
-        count.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_up));
+        count.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_to_top));
         count.setVisibility(View.GONE);
+
+/*
+        fadeInAnimation.withEndAction(new Runnable() {
+            @Override
+            public void run() {
+        //do stuff
+            }
+        }); */
     }
 
     @Override

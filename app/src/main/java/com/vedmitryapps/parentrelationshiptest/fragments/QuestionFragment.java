@@ -30,7 +30,7 @@ public class QuestionFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.question_fragment_view, container, false);
+        View view = inflater.inflate(R.layout.fragment_question, container, false);
         String question = getArguments().getString("args");
         TextView textView = view.findViewById(R.id.question);
         textView.setText(question);

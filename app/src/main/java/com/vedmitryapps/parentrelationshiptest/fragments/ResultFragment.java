@@ -19,7 +19,7 @@ public class ResultFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.result_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_result_main, container, false);
 
 
         ResultAdapter adapter = new ResultAdapter(getActivity().getApplicationContext(), this.getArguments().getIntArray("result"));

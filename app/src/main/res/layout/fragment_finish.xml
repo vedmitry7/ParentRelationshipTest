@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:textColor="@android:color/black"
+        android:id="@+id/share"
+        android:textSize="16dp"
+        android:onClick="startTesting"
+        android:layout_gravity="center"
+        android:background="@drawable/round_button_selector"
+        android:padding="10dp"
+        android:text="Поделиться приложением"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+
+    <Button
+        android:textColor="@android:color/black"
+        android:id="@+id/rare"
+        android:textSize="16dp"
+        android:onClick="startTesting"
+        android:layout_gravity="center"
+        android:background="@drawable/round_button_selector"
+        android:padding="10dp"
+        android:text="Оценить"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="45dp"
+        android:layout_above="@+id/exit"
+        android:layout_alignLeft="@+id/exit"
+        android:layout_alignStart="@+id/exit" />
+
+
+    <Button
+        android:textColor="@android:color/black"
+        android:id="@+id/exit"
+        android:textSize="16dp"
+        android:onClick="startTesting"
+        android:layout_gravity="center"
+        android:background="@drawable/round_button_selector"
+        android:padding="10dp"
+        android:text="Выход"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="62dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+
+</RelativeLayout>

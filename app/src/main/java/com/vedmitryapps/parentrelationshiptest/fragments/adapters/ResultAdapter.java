@@ -27,7 +27,13 @@ public class ResultAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup collection, int position) {
 
-        View view = LayoutInflater.from(context).inflate(R.layout.result_fragmen_tab,  null);
+        if(position == 5){
+            View view = LayoutInflater.from(context).inflate(R.layout.fragment_finish,  null);
+            collection.addView(view);
+            return view;
+        }
+
+        View view = LayoutInflater.from(context).inflate(R.layout.fragment_result_tab,  null);
 
        // result.setText("Ваш результат - " + this.result[0] + " "+ this.result[1] + " "+ this.result[2] + " "+ this.result[3] + " "+ this.result[4] );
 
@@ -105,7 +111,7 @@ public class ResultAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return 5;
+        return 6;
     }
 
     @Override
