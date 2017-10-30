@@ -1,19 +1,23 @@
 package com.vedmitryapps.parentrelationshiptest.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.vedmitryapps.parentrelationshiptest.R;
@@ -38,9 +42,11 @@ public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPrefs;
 
-    Button resumeButton;
+    Button startButton;
 
     State state = State.START;
+
+    RelativeLayout mainLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,15 +65,16 @@ public class MainActivity extends AppCompatActivity {
         questions = Arrays.asList(getResources().getStringArray(R.array.questions));
 
         buttons = (CoordinatorLayout) findViewById(R.id.buttons) ;
-        resumeButton = (Button) findViewById(R.id.btnResume);
 
         count = (TextView) findViewById(R.id.count) ;
-        startFragment();
+
+        mainLayout = (RelativeLayout) findViewById(R.id.main_layout);
 
         sharedPrefs = getSharedPreferences("prefs", Context.MODE_PRIVATE);
 
         if(savedInstanceState != null){
             String stateString = savedInstanceState.getString("state");
+            //check if null!
             this.state = State.valueOf(stateString);
             if(state == State.INPROCESS){
                 position = savedInstanceState.getInt("position");
@@ -80,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+        startFragment();
     }
 
     @Override
@@ -226,8 +234,10 @@ public class MainActivity extends AppCompatActivity {
         buttons.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_down));
         buttons.setVisibility(View.GONE);
 
-        count.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_to_top));
-        count.setVisibility(View.GONE);
+/*        count.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_to_top));
+        count.setVisibility(View.GONE);*/
+        stepOne();
+        stepTwo();
 
 /*
         fadeInAnimation.withEndAction(new Runnable() {
@@ -238,11 +248,52 @@ public class MainActivity extends AppCompatActivity {
         }); */
     }
 
+    void stepOne() {
+        count.animate()
+                .setDuration(50)
+                .translationY(-count.getHeight())
+                .alpha(0)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                       // stepTwo();
+                    }
+                });
+    }
+    void stepTwo() {
+        mainLayout.animate()
+                .setDuration(50)
+                .translationY(-count.getHeight())
+                .setInterpolator(new AccelerateInterpolator())
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        stepThree();
+                    }
+                });
+    }
+    /*
+    нужно в конце анимаци вернуть свойства в исходное состояние, но так,
+    чтобы взаимное расположение осталось неизменным
+     */
+    void stepThree() {
+        // отключаем лиснеры, на всякий случай, чтобы при следующей анимации неожиданно не сработал
+        mainLayout.animate().setListener(null);
+        count.animate().setListener(null);
+        // сводим задачу к предыдущей
+        count.setVisibility(View.GONE);
+        // возвращаем свойства в исходное состояние
+        mainLayout.setTranslationY(0);
+        count.setTranslationY(0);
+        count.setAlpha(1);
+    }
+
     @Override
     public void onBackPressed() {
 
         if(state==State.START){
-            super.onBackPressed();
+            finish();
+            //super.onBackPressed();
             return;
         }
         if(position==0){
@@ -254,7 +305,7 @@ public class MainActivity extends AppCompatActivity {
             backQuestion();
             canReturn = false;
         } else {
-          /*  new AlertDialog.Builder(this)
+            new AlertDialog.Builder(this)
                     .setTitle("Выйти?")
                     .setMessage("Процесс будет сохранен.")
                     .setPositiveButton("Выход", new DialogInterface.OnClickListener()
@@ -268,9 +319,8 @@ public class MainActivity extends AppCompatActivity {
                     .setNegativeButton("Нет", null)
                  //   .setNeutralButton("Закончить тест", null)
                     .show();
-*/
 
-            Snackbar myAwesomeSnackbar = Snackbar.make(
+           /* Snackbar myAwesomeSnackbar = Snackbar.make(
                     buttons,
                     "Прервать тест?" + "\r\n" +"Результат будет сохранен.",
                     Snackbar.LENGTH_LONG
@@ -285,7 +335,7 @@ public class MainActivity extends AppCompatActivity {
             TextView textView = myAwesomeSnackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
             textView.setTextColor(Color.WHITE);
             // textView.setTextSize(16);
-            myAwesomeSnackbar.show();
+            myAwesomeSnackbar.show();*/
             Log.i("TAG21", "back");
         }
     }
@@ -293,7 +343,7 @@ public class MainActivity extends AppCompatActivity {
     private void backQuestion(){
         position--;
         mas[position] = false;
-        count.setText(String.valueOf(position+1)+"/"+"61");
+        count.setText("Вопрос " + String.valueOf(position+1)+" из 61");
 
         Fragment fragment = QuestionFragment.newInstance(questions.get(position));
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -310,8 +360,7 @@ public class MainActivity extends AppCompatActivity {
                 mas = new boolean[61];
                 break;
             case R.id.btnResume:
-
-                String savedResult = sharedPrefs.getString("state", null);
+                String savedResult = sharedPrefs.getString("result_string", null);
                 position = sharedPrefs.getInt("position", 0);
 
                 String[] result = savedResult.split(" ");
@@ -331,25 +380,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onStop() {
-
+        Log.i("TAG21", "onStop" );
        saveResultOnPrefs();
 
         super.onStop();
     }
 
     private void saveResultOnPrefs() {
-        String result = "";
-        for (int i = 0; i < mas.length; i++) {
-            result += String.valueOf(mas[i] + " ");
+        if(state == State.INPROCESS){
+            String result = "";
+            for (int i = 0; i < mas.length; i++) {
+                result += String.valueOf(mas[i] + " ");
+            }
+            Log.i("TAG21", result );
+            sharedPrefs.edit().putString("result_string", result).commit();
+            sharedPrefs.edit().putInt("position", position).commit();
+            sharedPrefs.edit().putString("state", state.name()).commit();
+        } else {
+            sharedPrefs.edit().putString("state", null).commit();
         }
-        Log.i("TAG21", "onStop" );
-        Log.i("TAG21", result );
 
-        sharedPrefs.edit().putString("state", result).commit();
-        sharedPrefs.edit().putInt("position", position).commit();
+
     }
 
     @Override
