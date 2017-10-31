@@ -56,8 +56,10 @@ public class ResultAdapter extends PagerAdapter {
                 progress.setProgress(this.result[0]);
                 webView.loadData(toHtmlString(context.getString(R.string.acceptance_description)),
                         "text/html; charset=utf-8", "utf-8");
-                webViewDesc.loadData(toHtmlString(context.getString(R.string.acceptance_description_1)),
-                        "text/html; charset=utf-8", "utf-8");
+      /*          webViewDesc.loadData(toHtmlString(context.getString(R.string.acceptance_description_1)),
+                        "text/html; charset=utf-8", "utf-8");*/
+                webViewDesc.loadUrl("file:///android_asset/pages/acceptance_description.html");
+
                 break;
             case 1:
                 name.setText(context.getString(R.string.cooperation));
@@ -67,8 +69,10 @@ public class ResultAdapter extends PagerAdapter {
                 progress.setProgress(this.result[1]);
                 webView.loadData(toHtmlString(context.getString(R.string.cooperation_description)),
                         "text/html; charset=utf-8", "utf-8");
-                webViewDesc.loadData(toHtmlString(context.getString(R.string.cooperation_description_1)),
-                        "text/html; charset=utf-8", "utf-8");
+               /* webViewDesc.loadData(toHtmlString(context.getString(R.string.cooperation_description_1)),
+                        "text/html; charset=utf-8", "utf-8");*/
+                webViewDesc.loadUrl("file:///android_asset/pages/cooperation_description.html");
+
                 break;
             case 2:
                 name.setText(context.getString(R.string.symbiosis));
@@ -78,8 +82,10 @@ public class ResultAdapter extends PagerAdapter {
                 progress.setProgress(this.result[2]);
                 webView.loadData(toHtmlString(context.getString(R.string.symbiosis_description)),
                         "text/html; charset=utf-8", "utf-8");
-                webViewDesc.loadData(toHtmlString(context.getString(R.string.symbiosis_description_1)),
-                        "text/html; charset=utf-8", "utf-8");
+      /*          webViewDesc.loadData(toHtmlString(context.getString(R.string.symbiosis_description_1)),
+                        "text/html; charset=utf-8", "utf-8");*/
+                webViewDesc.loadUrl("file:///android_asset/pages/symbiosis_description.html");
+
                 break;
             case 3:
                 name.setText(context.getString(R.string.control));
@@ -89,8 +95,10 @@ public class ResultAdapter extends PagerAdapter {
                 progress.setProgress(this.result[3]);
                 webView.loadData(toHtmlString(context.getString(R.string.control_description)),
                         "text/html; charset=utf-8", "utf-8");
-                webViewDesc.loadData(toHtmlString(context.getString(R.string.control_description_1)),
-                        "text/html; charset=utf-8", "utf-8");
+             /*   webViewDesc.loadData(toHtmlString(context.getString(R.string.control_description_1)),
+                        "text/html; charset=utf-8", "utf-8");*/
+                webViewDesc.loadUrl("file:///android_asset/pages/control_description.html");
+
                 break;
             case 4:
                 name.setText(context.getString(R.string.failures));
@@ -100,8 +108,10 @@ public class ResultAdapter extends PagerAdapter {
                 progress.setProgress(this.result[4]);
                 webView.loadData(toHtmlString(context.getString(R.string.failures_description)),
                         "text/html; charset=utf-8", "utf-8");
-                webViewDesc.loadData(toHtmlString(context.getString(R.string.failures_description_1)),
-                        "text/html; charset=utf-8", "utf-8");
+                /*webViewDesc.loadData(toHtmlString(context.getString(R.string.failures_description_1)),
+                        "text/html; charset=utf-8", "utf-8");*/
+                webViewDesc.loadUrl("file:///android_asset/pages/failures_description.html");
+
                 break;
         }
 

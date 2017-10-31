@@ -355,6 +355,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void startTesting(View view) {
         switch (view.getId()){
+            case R.id.exit:
+                finish();
+                break;
             case R.id.btnStart:
                 position = 0;
                 mas = new boolean[61];
