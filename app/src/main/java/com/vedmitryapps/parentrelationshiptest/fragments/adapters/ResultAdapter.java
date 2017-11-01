@@ -54,10 +54,8 @@ public class ResultAdapter extends PagerAdapter {
                 progress.setMax(33);
                 progress.setSecondaryProgress(33);
                 progress.setProgress(this.result[0]);
-                webView.loadData(toHtmlString(context.getString(R.string.acceptance_description)),
-                        "text/html; charset=utf-8", "utf-8");
-      /*          webViewDesc.loadData(toHtmlString(context.getString(R.string.acceptance_description_1)),
-                        "text/html; charset=utf-8", "utf-8");*/
+                webView.loadUrl("file:///android_asset/pages/acceptance.html");
+
                 webViewDesc.loadUrl("file:///android_asset/pages/acceptance_description.html");
 
                 break;
@@ -67,10 +65,8 @@ public class ResultAdapter extends PagerAdapter {
                 progress.setMax(8);
                 progress.setSecondaryProgress(8);
                 progress.setProgress(this.result[1]);
-                webView.loadData(toHtmlString(context.getString(R.string.cooperation_description)),
-                        "text/html; charset=utf-8", "utf-8");
-               /* webViewDesc.loadData(toHtmlString(context.getString(R.string.cooperation_description_1)),
-                        "text/html; charset=utf-8", "utf-8");*/
+                webView.loadUrl("file:///android_asset/pages/cooperation.html");
+
                 webViewDesc.loadUrl("file:///android_asset/pages/cooperation_description.html");
 
                 break;
@@ -80,10 +76,7 @@ public class ResultAdapter extends PagerAdapter {
                 progress.setMax(7);
                 progress.setSecondaryProgress(7);
                 progress.setProgress(this.result[2]);
-                webView.loadData(toHtmlString(context.getString(R.string.symbiosis_description)),
-                        "text/html; charset=utf-8", "utf-8");
-      /*          webViewDesc.loadData(toHtmlString(context.getString(R.string.symbiosis_description_1)),
-                        "text/html; charset=utf-8", "utf-8");*/
+                webView.loadUrl("file:///android_asset/pages/symbiosis.html");
                 webViewDesc.loadUrl("file:///android_asset/pages/symbiosis_description.html");
 
                 break;
@@ -93,10 +86,7 @@ public class ResultAdapter extends PagerAdapter {
                 progress.setMax(7);
                 progress.setSecondaryProgress(7);
                 progress.setProgress(this.result[3]);
-                webView.loadData(toHtmlString(context.getString(R.string.control_description)),
-                        "text/html; charset=utf-8", "utf-8");
-             /*   webViewDesc.loadData(toHtmlString(context.getString(R.string.control_description_1)),
-                        "text/html; charset=utf-8", "utf-8");*/
+                webView.loadUrl("file:///android_asset/pages/control.html");
                 webViewDesc.loadUrl("file:///android_asset/pages/control_description.html");
 
                 break;
@@ -106,10 +96,7 @@ public class ResultAdapter extends PagerAdapter {
                 progress.setMax(7);
                 progress.setSecondaryProgress(7);
                 progress.setProgress(this.result[4]);
-                webView.loadData(toHtmlString(context.getString(R.string.failures_description)),
-                        "text/html; charset=utf-8", "utf-8");
-                /*webViewDesc.loadData(toHtmlString(context.getString(R.string.failures_description_1)),
-                        "text/html; charset=utf-8", "utf-8");*/
+                webView.loadUrl("file:///android_asset/pages/failures.html");
                 webViewDesc.loadUrl("file:///android_asset/pages/failures_description.html");
 
                 break;

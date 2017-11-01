@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
         xmlns:tools="http://schemas.android.com/tools"
         tools:context="com.vedmitryapps.parentrelationshiptest.activities.MainActivity"
         android:layout_width="match_parent"
@@ -9,8 +10,7 @@
         >
 
         <TextView
-            android:paddingTop="6dp"
-            android:layout_marginRight="10dp"
+            android:paddingTop="16dp"
             android:text="dfsgd"
             android:alpha="0.68"
             android:textColor="@android:color/black"
@@ -22,7 +22,6 @@
             android:layout_height="wrap_content" />
 
         <RelativeLayout
-            android:paddingTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/main_layout"
