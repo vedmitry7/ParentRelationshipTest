@@ -59,35 +59,40 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.i("TAG21", "onCreate" );
 
+        sharedPrefs = getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        sharedPrefs.edit().putInt("resultAdapterPosition", 0).commit();
         fragmentManager = getFragmentManager();
-
         questions = new ArrayList();
         questions = Arrays.asList(getResources().getStringArray(R.array.questions));
 
-        buttons = (CoordinatorLayout) findViewById(R.id.buttons) ;
-
-        count = (TextView) findViewById(R.id.count) ;
-
-        mainLayout = (RelativeLayout) findViewById(R.id.main_layout);
-
-        sharedPrefs = getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        initView();
 
         if(savedInstanceState != null){
             String stateString = savedInstanceState.getString("state");
             //check if null!
             this.state = State.valueOf(stateString);
             if(state == State.INPROCESS){
-                position = savedInstanceState.getInt("position");
-                mas = savedInstanceState.getBooleanArray("array");
+               loadDataFromPrefs();
+                /* position = savedInstanceState.getInt("position");
+                mas = savedInstanceState.getBooleanArray("array");*/
                 nextQuestion();
                 Log.i("TAG21", String.valueOf(position));
-                for (boolean b:mas
-                        ) {
-                    Log.i("TAG21", String.valueOf(b) );
-                }
             }
-        }
+            if(state == State.RESULT){
+                loadDataFromPrefs();
+                /* position = savedInstanceState.getInt("position");
+                mas = savedInstanceState.getBooleanArray("array");*/
+                showResult();
+                Log.i("TAG21", String.valueOf(position));
+            }
+        } else
         startFragment();
+    }
+
+    private void initView() {
+        buttons = (CoordinatorLayout) findViewById(R.id.buttons) ;
+        count = (TextView) findViewById(R.id.count) ;
+        mainLayout = (RelativeLayout) findViewById(R.id.main_layout);
     }
 
     @Override
@@ -105,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         START, INPROCESS, RESULT
     }
 
-    public void onClick(View view) {
+    public void onAnswer(View view) {
         Log.i("TAG21", "click" );
         switch (view.getId()){
             case R.id.posBtn:
@@ -124,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startFragment(){
+        sharedPrefs.edit().putInt("resultAdapterPosition", 0).commit();
         Fragment fragment = new StartFragment();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
@@ -239,13 +245,6 @@ public class MainActivity extends AppCompatActivity {
         stepOne();
         stepTwo();
 
-/*
-        fadeInAnimation.withEndAction(new Runnable() {
-            @Override
-            public void run() {
-        //do stuff
-            }
-        }); */
     }
 
     void stepOne() {
@@ -326,7 +325,7 @@ public class MainActivity extends AppCompatActivity {
                     Snackbar.LENGTH_LONG
             ).setAction("Да", new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onAnswer(View view) {
                     saveResultOnPrefs();
                     startFragment();
                 }
@@ -353,7 +352,8 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    public void startTesting(View view) {
+    public void onClick(View view) {
+        Log.i("TAG21", "onAnswer" );
         switch (view.getId()){
             case R.id.exit:
                 finish();
@@ -363,36 +363,38 @@ public class MainActivity extends AppCompatActivity {
                 mas = new boolean[61];
                 break;
             case R.id.btnResume:
-                String savedResult = sharedPrefs.getString("result_string", null);
-                position = sharedPrefs.getInt("position", 0);
+                loadDataFromPrefs();
+                break;
+            case R.id.share:
 
-                String[] result = savedResult.split(" ");
+                break;
+            case R.id.rate:
 
-                for (int i = 0; i < result.length; i++) {
-                    mas[i] = Boolean.valueOf(result[i]);
-                }
-
-                for (boolean b:mas
-                     ) {
-                    Log.i("TAG21", String.valueOf(b) );
-                }
                 break;
         }
         nextQuestion();
         showButtons();
     }
 
+    private void loadDataFromPrefs() {
+        String savedResult = sharedPrefs.getString("result_string", null);
+        position = sharedPrefs.getInt("position", 0);
+        String[] result = savedResult.split(" ");
+        for (int i = 0; i < result.length; i++) {
+            mas[i] = Boolean.valueOf(result[i]);
+        }
+    }
+
 
     @Override
     protected void onStop() {
         Log.i("TAG21", "onStop" );
-       saveResultOnPrefs();
-
+        saveResultOnPrefs();
         super.onStop();
     }
 
     private void saveResultOnPrefs() {
-        if(state == State.INPROCESS){
+        if(state == State.INPROCESS || state == State.RESULT){
             String result = "";
             for (int i = 0; i < mas.length; i++) {
                 result += String.valueOf(mas[i] + " ");

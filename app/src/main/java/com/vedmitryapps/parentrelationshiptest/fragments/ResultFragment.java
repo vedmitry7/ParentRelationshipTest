@@ -1,6 +1,8 @@
 package com.vedmitryapps.parentrelationshiptest.fragments;
 
 import android.app.Fragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -10,36 +12,41 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.vedmitryapps.parentrelationshiptest.R;
+import com.vedmitryapps.parentrelationshiptest.activities.MainActivity;
 import com.vedmitryapps.parentrelationshiptest.fragments.adapters.ResultAdapter;
 
 
 public class ResultFragment extends Fragment {
 
+    private SharedPreferences sharedPrefs;
+    private MainActivity mainActivity;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_result_main, container, false);
 
+        sharedPrefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        int position = sharedPrefs.getInt("resultAdapterPosition" , 0);
 
-        ResultAdapter adapter = new ResultAdapter(getActivity().getApplicationContext(), this.getArguments().getIntArray("result"));
+        mainActivity = (MainActivity) getActivity();
+
+        ResultAdapter adapter = new ResultAdapter(mainActivity, this.getArguments().getIntArray("result"));
         ViewPager viewPager = view.findViewById(R.id.resultViewPager);
         viewPager.setAdapter(adapter);
-
+        viewPager.setCurrentItem(position);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
             public void onPageSelected(int position) {
-
+                sharedPrefs.edit().putInt("resultAdapterPosition", position).commit();
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
         TabLayout tabLayout = view.findViewById(R.id.resultTab);

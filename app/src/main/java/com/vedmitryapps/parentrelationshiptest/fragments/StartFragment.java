@@ -24,8 +24,6 @@ public class StartFragment extends Fragment {
 
         WebView webView = view.findViewById(R.id.test_description);
         webView.setBackgroundColor(Color.TRANSPARENT);
-   /*     webView.loadData(toHtmlString(getActivity().getApplicationContext().getString(R.string.test_description)),
-                "text/html; charset=utf-8", "utf-8");*/
         webView.loadUrl("file:///android_asset/pages/main_page.html");
 
         Button resumeButton =  view.findViewById(R.id.btnResume);

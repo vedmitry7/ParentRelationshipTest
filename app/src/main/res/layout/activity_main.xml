@@ -50,7 +50,6 @@
                 android:orientation="horizontal"
                >
 
-
                 <Button
                     android:layout_marginBottom="10dp"
                     android:id="@+id/posBtn"
@@ -59,8 +58,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
-                    android:onClick="onClick"
+                    android:onClick="onAnswer"
                     android:text="Да"/>
+
                 <Button
                     android:layout_marginBottom="10dp"
                     android:layout_marginLeft="25dp"
@@ -68,7 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
-                    android:onClick="onClick"
+                    android:onClick="onAnswer"
                     android:text="Нет"/>
 
             </LinearLayout>
