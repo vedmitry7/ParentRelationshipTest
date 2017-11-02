@@ -9,17 +9,19 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.vedmitryapps.parentrelationshiptest.R;
 import com.vedmitryapps.parentrelationshiptest.fragments.QuestionFragment;
 import com.vedmitryapps.parentrelationshiptest.fragments.ResultFragment;
@@ -38,15 +40,15 @@ public class MainActivity extends AppCompatActivity {
     private boolean canReturn = true;
 
     private TextView count;
-    private CoordinatorLayout buttons;
+    private LinearLayout buttons;
 
     private SharedPreferences sharedPrefs;
 
-    Button startButton;
+    private Mode mode = Mode.START;
 
-    State state = State.START;
+    private RelativeLayout mainLayout;
 
-    RelativeLayout mainLayout;
+    private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,17 +70,17 @@ public class MainActivity extends AppCompatActivity {
         initView();
 
         if(savedInstanceState != null){
-            String stateString = savedInstanceState.getString("state");
+            String stateString = savedInstanceState.getString("mode");
             //check if null!
-            this.state = State.valueOf(stateString);
-            if(state == State.INPROCESS){
+            this.mode = Mode.valueOf(stateString);
+            if(mode == Mode.TESTING){
                loadDataFromPrefs();
                 /* position = savedInstanceState.getInt("position");
                 mas = savedInstanceState.getBooleanArray("array");*/
                 nextQuestion();
                 Log.i("TAG21", String.valueOf(position));
             }
-            if(state == State.RESULT){
+            if(mode == Mode.RESULT){
                 loadDataFromPrefs();
                 /* position = savedInstanceState.getInt("position");
                 mas = savedInstanceState.getBooleanArray("array");*/
@@ -90,15 +92,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        buttons = (CoordinatorLayout) findViewById(R.id.buttons) ;
-        count = (TextView) findViewById(R.id.count) ;
-        mainLayout = (RelativeLayout) findViewById(R.id.main_layout);
+        buttons =  findViewById(R.id.buttons) ;
+        count =  findViewById(R.id.count) ;
+        mainLayout = findViewById(R.id.main_layout);
+
+        mAdView = findViewById(R.id.adView);
+
+        mAdView = findViewById(R.id.adView);
+        //    mAdView.setVisibility(View.GONE);
+
+        mAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                if (mAdView.getVisibility() == View.GONE) {
+                    mAdView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        AdRequest adRequest = new AdRequest.Builder()
+                .build();
+        mAdView.loadAd(adRequest);
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putString("state", state.name());
-        if(state == State.INPROCESS){
+        savedInstanceState.putString("mode", mode.name());
+        if(mode == Mode.TESTING){
             savedInstanceState.putBooleanArray("array", mas);
             savedInstanceState.putInt("position", position);
         }
@@ -106,8 +126,8 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    enum State{
-        START, INPROCESS, RESULT
+    public enum Mode {
+        START, TESTING, RESULT
     }
 
     public void onAnswer(View view) {
@@ -117,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                 mas[position] = true;
         }
         position++;
-        if(position == 3){
+        if(position == 5){
             Log.i("TAG21", "finish" );
             showResult();
             return;
@@ -133,10 +153,10 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = new StartFragment();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-        if(state==State.INPROCESS) {
+        if(mode == Mode.TESTING) {
             hideButtons();
             transaction.setCustomAnimations(R.animator.slide_from_right, R.animator.slide_to_right);
-            state = State.START;
+            mode = Mode.START;
         }
 
         //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_left);
@@ -146,8 +166,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void nextQuestion(){
-        if(state==State.START ){
-            state = State.INPROCESS;
+        if(mode == Mode.START ){
+            mode = Mode.TESTING;
         }
         if(buttons.getVisibility()==View.GONE){
             showButtons();
@@ -210,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        state = State.RESULT;
+        mode = Mode.RESULT;
 
         int[] result = {acceptanceResult, cooperationResult, symbiosisResult, controlResult, failuresResult};
         Fragment fragment = new ResultFragment();
@@ -290,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        if(state==State.START){
+        if(mode == Mode.START){
             finish();
             //super.onBackPressed();
             return;
@@ -300,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        if(canReturn && state!=State.RESULT){
+        if(canReturn && mode != Mode.RESULT){
             backQuestion();
             canReturn = false;
         } else {
@@ -318,23 +338,6 @@ public class MainActivity extends AppCompatActivity {
                     .setNegativeButton("Нет", null)
                  //   .setNeutralButton("Закончить тест", null)
                     .show();
-
-           /* Snackbar myAwesomeSnackbar = Snackbar.make(
-                    buttons,
-                    "Прервать тест?" + "\r\n" +"Результат будет сохранен.",
-                    Snackbar.LENGTH_LONG
-            ).setAction("Да", new View.OnClickListener() {
-                @Override
-                public void onAnswer(View view) {
-                    saveResultOnPrefs();
-                    startFragment();
-                }
-            });
-            myAwesomeSnackbar.getView().setBackgroundColor(Color.parseColor("#99000000"));
-            TextView textView = myAwesomeSnackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-            textView.setTextColor(Color.WHITE);
-            // textView.setTextSize(16);
-            myAwesomeSnackbar.show();*/
             Log.i("TAG21", "back");
         }
     }
@@ -394,7 +397,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveResultOnPrefs() {
-        if(state == State.INPROCESS || state == State.RESULT){
+        if(mode == Mode.TESTING || mode == Mode.RESULT){
             String result = "";
             for (int i = 0; i < mas.length; i++) {
                 result += String.valueOf(mas[i] + " ");
@@ -402,9 +405,9 @@ public class MainActivity extends AppCompatActivity {
             Log.i("TAG21", result );
             sharedPrefs.edit().putString("result_string", result).commit();
             sharedPrefs.edit().putInt("position", position).commit();
-            sharedPrefs.edit().putString("state", state.name()).commit();
+            sharedPrefs.edit().putString("mode", mode.name()).commit();
         } else {
-            sharedPrefs.edit().putString("state", null).commit();
+            sharedPrefs.edit().putString("mode", null).commit();
         }
 
 
@@ -423,8 +426,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (mAdView != null)
+            mAdView.resume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (mAdView != null)
+            mAdView.pause();
+    }
+
+    @Override
     protected void onDestroy() {
-        Log.i("TAG21", "onDestroy" );
         super.onDestroy();
+        Log.i("TAG21", "onDestroy" );
+
+        if (mAdView != null)
+            mAdView.destroy();
     }
 }

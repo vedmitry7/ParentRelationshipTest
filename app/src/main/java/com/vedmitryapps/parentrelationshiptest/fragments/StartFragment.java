@@ -14,6 +14,7 @@ import android.webkit.WebView;
 import android.widget.Button;
 
 import com.vedmitryapps.parentrelationshiptest.R;
+import com.vedmitryapps.parentrelationshiptest.activities.MainActivity;
 
 public class StartFragment extends Fragment {
 
@@ -30,8 +31,8 @@ public class StartFragment extends Fragment {
         Button startButton =  view.findViewById(R.id.btnStart);
 
         SharedPreferences sharedPrefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
-        String stateString = sharedPrefs.getString("state", null);
-        if(stateString != null && stateString.equals("INPROCESS")){
+        String stateString = sharedPrefs.getString("mode", null);
+        if(stateString != null && stateString.equals(MainActivity.Mode.TESTING)){
             startButton.setText("Начать заново");
             resumeButton.setVisibility(View.VISIBLE);
         }
