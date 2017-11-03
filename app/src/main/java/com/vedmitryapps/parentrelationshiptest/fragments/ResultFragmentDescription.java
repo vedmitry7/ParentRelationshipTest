@@ -16,8 +16,6 @@ public class ResultFragmentDescription extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_result_tab, container, false);
-
-
         return view;
     }
 }

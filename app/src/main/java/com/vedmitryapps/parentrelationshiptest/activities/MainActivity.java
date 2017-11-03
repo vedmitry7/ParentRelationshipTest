@@ -38,11 +38,13 @@ public class MainActivity extends AppCompatActivity {
     private int position = 0;
     private boolean[] mas = new boolean[61];
     private boolean canReturn = true;
+    private boolean interrapted = false;
 
     private TextView count;
     private LinearLayout buttons;
 
     private SharedPreferences sharedPrefs;
+    private SharedPreferences.Editor editor;
 
     private Mode mode = Mode.START;
 
@@ -62,7 +64,10 @@ public class MainActivity extends AppCompatActivity {
         Log.i("TAG21", "onCreate" );
 
         sharedPrefs = getSharedPreferences("prefs", Context.MODE_PRIVATE);
-        sharedPrefs.edit().putInt("resultAdapterPosition", 0).commit();
+        editor = sharedPrefs.edit();
+
+        editor.putInt("resultAdapterPosition", 0).apply();
+
         fragmentManager = getFragmentManager();
         questions = new ArrayList();
         questions = Arrays.asList(getResources().getStringArray(R.array.questions));
@@ -149,8 +154,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startFragment(){
-        sharedPrefs.edit().putInt("resultAdapterPosition", 0).commit();
+        editor.putInt("resultAdapterPosition", 0).commit();
         Fragment fragment = new StartFragment();
+
+        String stateString = sharedPrefs.getString("mode", null);
+        if(stateString==null)
+            stateString = "";
+
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("interrupted", stateString.equals(Mode.TESTING.name()) || mode.equals(Mode.TESTING) || sharedPrefs.getBoolean("interrupted", false));
+        Log.i("TAG21", "test" );
+        Log.i("TAG21", mode.equals(Mode.TESTING)+"");
+        Log.i("TAG21",sharedPrefs.getBoolean("interrupted", false)+"");
+        fragment.setArguments(bundle);
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
         if(mode == Mode.TESTING) {
@@ -166,12 +182,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void nextQuestion(){
-        if(mode == Mode.START ){
+        if(mode == Mode.START || mode == Mode.RESULT){
             mode = Mode.TESTING;
         }
         if(buttons.getVisibility()==View.GONE){
             showButtons();
         }
+
         count.setText("Вопрос " + String.valueOf(position+1)+" из 61");
 
         Fragment fragment = QuestionFragment.newInstance(questions.get(position));
@@ -188,12 +205,6 @@ public class MainActivity extends AppCompatActivity {
         int[] symbiosis = {1, 4, 7, 28, 32, 41, 58};
         int[] control = {2, 19, 30, 48, 50, 57, 59};
         int[] failures = {9, 11, 13, 17, 22, 54, 61};
-
-  /*      int[] acceptance = {1, 5};
-        int[] cooperation = {2};
-        int[] symbiosis = {3,4};
-        int[] control = {};
-        int[] failures = {5};*/
 
         int acceptanceResult = 0;
         for (int i = 0; i < acceptance.length; i++) {
@@ -260,14 +271,10 @@ public class MainActivity extends AppCompatActivity {
         buttons.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_down));
         buttons.setVisibility(View.GONE);
 
-/*        count.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_to_top));
-        count.setVisibility(View.GONE);*/
-        stepOne();
-        stepTwo();
-
+        animateHideUp();
     }
 
-    void stepOne() {
+    void animateHideUp() {
         count.animate()
                 .setDuration(50)
                 .translationY(-count.getHeight())
@@ -275,11 +282,8 @@ public class MainActivity extends AppCompatActivity {
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                       // stepTwo();
                     }
                 });
-    }
-    void stepTwo() {
         mainLayout.animate()
                 .setDuration(50)
                 .translationY(-count.getHeight())
@@ -287,21 +291,15 @@ public class MainActivity extends AppCompatActivity {
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        stepThree();
+                        animateFinish();
                     }
                 });
     }
-    /*
-    нужно в конце анимаци вернуть свойства в исходное состояние, но так,
-    чтобы взаимное расположение осталось неизменным
-     */
-    void stepThree() {
-        // отключаем лиснеры, на всякий случай, чтобы при следующей анимации неожиданно не сработал
+
+    void animateFinish() {
         mainLayout.animate().setListener(null);
         count.animate().setListener(null);
-        // сводим задачу к предыдущей
         count.setVisibility(View.GONE);
-        // возвращаем свойства в исходное состояние
         mainLayout.setTranslationY(0);
         count.setTranslationY(0);
         count.setAlpha(1);
@@ -309,10 +307,24 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if(mode == Mode.RESULT){
+            new AlertDialog.Builder(this)
+                    .setTitle("Выйти?")
+                    .setPositiveButton("Да", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("Нет", null)
+                    .show();
+            return;
+        }
+
 
         if(mode == Mode.START){
             finish();
-            //super.onBackPressed();
             return;
         }
         if(position==0){
@@ -331,6 +343,8 @@ public class MainActivity extends AppCompatActivity {
                     {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            editor.putBoolean("interrupted", true).commit();
+                            saveResultOnPrefs();
                             startFragment();
                         }
 
@@ -364,19 +378,26 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btnStart:
                 position = 0;
                 mas = new boolean[61];
+                nextQuestion();
+                showButtons();
                 break;
             case R.id.btnResume:
                 loadDataFromPrefs();
+                Log.i("TAG21", position+ "" );
+                editor.putBoolean("interrupted", false).commit();
+                nextQuestion();
+                showButtons();
                 break;
             case R.id.share:
+                Log.i("TAG21", "share" );
 
                 break;
             case R.id.rate:
+                Log.i("TAG21", "rate" );
 
                 break;
         }
-        nextQuestion();
-        showButtons();
+
     }
 
     private void loadDataFromPrefs() {
@@ -403,11 +424,11 @@ public class MainActivity extends AppCompatActivity {
                 result += String.valueOf(mas[i] + " ");
             }
             Log.i("TAG21", result );
-            sharedPrefs.edit().putString("result_string", result).commit();
-            sharedPrefs.edit().putInt("position", position).commit();
-            sharedPrefs.edit().putString("mode", mode.name()).commit();
+            editor.putString("result_string", result).apply();
+            editor.putInt("position", position).apply();
+            editor.putString("mode", mode.name()).apply();
         } else {
-            sharedPrefs.edit().putString("mode", null).commit();
+            editor.putString("mode", null).apply();
         }
 
 

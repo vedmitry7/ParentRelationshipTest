@@ -12,14 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.vedmitryapps.parentrelationshiptest.R;
-import com.vedmitryapps.parentrelationshiptest.activities.MainActivity;
 import com.vedmitryapps.parentrelationshiptest.fragments.adapters.ResultAdapter;
 
 
 public class ResultFragment extends Fragment {
 
     private SharedPreferences sharedPrefs;
-    private MainActivity mainActivity;
 
     @Nullable
     @Override
@@ -29,9 +27,8 @@ public class ResultFragment extends Fragment {
         sharedPrefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
         int position = sharedPrefs.getInt("resultAdapterPosition" , 0);
 
-        mainActivity = (MainActivity) getActivity();
 
-        ResultAdapter adapter = new ResultAdapter(mainActivity, this.getArguments().getIntArray("result"));
+        ResultAdapter adapter = new ResultAdapter(getContext(), this.getArguments().getIntArray("result"));
         ViewPager viewPager = view.findViewById(R.id.resultViewPager);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(position);
