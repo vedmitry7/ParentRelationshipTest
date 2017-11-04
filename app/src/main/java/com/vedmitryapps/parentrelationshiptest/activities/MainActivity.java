@@ -7,11 +7,12 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnimationUtils;
@@ -31,6 +32,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.vedmitryapps.parentrelationshiptest.Constants.KEY_INTERRUPTED;
+import static com.vedmitryapps.parentrelationshiptest.Constants.KEY_MODE;
+import static com.vedmitryapps.parentrelationshiptest.Constants.KEY_POSITION;
+import static com.vedmitryapps.parentrelationshiptest.Constants.KEY_PREFS;
+import static com.vedmitryapps.parentrelationshiptest.Constants.KEY_RESULT;
+import static com.vedmitryapps.parentrelationshiptest.Constants.KEY_RESULT_ADAPTER_POSITION;
+import static com.vedmitryapps.parentrelationshiptest.Constants.KEY_RESULT_STRING;
+import static com.vedmitryapps.parentrelationshiptest.Constants.acceptance;
+import static com.vedmitryapps.parentrelationshiptest.Constants.control;
+import static com.vedmitryapps.parentrelationshiptest.Constants.cooperation;
+import static com.vedmitryapps.parentrelationshiptest.Constants.failures;
+import static com.vedmitryapps.parentrelationshiptest.Constants.symbiosis;
+
 public class MainActivity extends AppCompatActivity {
 
     private List<String> questions;
@@ -38,35 +52,29 @@ public class MainActivity extends AppCompatActivity {
     private int position = 0;
     private boolean[] mas = new boolean[61];
     private boolean canReturn = true;
-    private boolean interrapted = false;
 
     private TextView count;
     private LinearLayout buttons;
+    private RelativeLayout mainLayout;
 
     private SharedPreferences sharedPrefs;
     private SharedPreferences.Editor editor;
 
     private Mode mode = Mode.START;
-
-    private RelativeLayout mainLayout;
-
     private AdView mAdView;
+
+    public enum Mode {
+        START, TESTING, RESULT
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-  /*      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Window w = getWindow();
-            w.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-            w.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }*/
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.i("TAG21", "onCreate" );
 
-        sharedPrefs = getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        sharedPrefs = getSharedPreferences(KEY_PREFS, Context.MODE_PRIVATE);
         editor = sharedPrefs.edit();
-
-        editor.putInt("resultAdapterPosition", 0).apply();
+        editor.putInt(KEY_RESULT_ADAPTER_POSITION, 0).apply();
 
         fragmentManager = getFragmentManager();
         questions = new ArrayList();
@@ -75,25 +83,19 @@ public class MainActivity extends AppCompatActivity {
         initView();
 
         if(savedInstanceState != null){
-            String stateString = savedInstanceState.getString("mode");
-            //check if null!
+            String stateString = savedInstanceState.getString(KEY_MODE);
             this.mode = Mode.valueOf(stateString);
             if(mode == Mode.TESTING){
                loadDataFromPrefs();
-                /* position = savedInstanceState.getInt("position");
-                mas = savedInstanceState.getBooleanArray("array");*/
                 nextQuestion();
-                Log.i("TAG21", String.valueOf(position));
             }
             if(mode == Mode.RESULT){
                 loadDataFromPrefs();
-                /* position = savedInstanceState.getInt("position");
-                mas = savedInstanceState.getBooleanArray("array");*/
                 showResult();
-                Log.i("TAG21", String.valueOf(position));
             }
-        } else
-        startFragment();
+        } else {
+            startFragment();
+        }
     }
 
     private void initView() {
@@ -102,10 +104,7 @@ public class MainActivity extends AppCompatActivity {
         mainLayout = findViewById(R.id.main_layout);
 
         mAdView = findViewById(R.id.adView);
-
         mAdView = findViewById(R.id.adView);
-        //    mAdView.setVisibility(View.GONE);
-
         mAdView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
@@ -114,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
         AdRequest adRequest = new AdRequest.Builder()
                 .build();
         mAdView.loadAd(adRequest);
@@ -122,50 +120,37 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putString("mode", mode.name());
-        if(mode == Mode.TESTING){
-            savedInstanceState.putBooleanArray("array", mas);
-            savedInstanceState.putInt("position", position);
-        }
-
+        savedInstanceState.putString(KEY_MODE, mode.name());
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    public enum Mode {
-        START, TESTING, RESULT
-    }
-
     public void onAnswer(View view) {
-        Log.i("TAG21", "click" );
+        if(position>=61)
+            return;
         switch (view.getId()){
             case R.id.posBtn:
                 mas[position] = true;
         }
         position++;
         if(position == 5){
-            Log.i("TAG21", "finish" );
             showResult();
             return;
         }
         canReturn = true;
-        if(position>61)
-            return;
+
         nextQuestion();
     }
 
     private void startFragment(){
-        editor.putInt("resultAdapterPosition", 0).commit();
+        editor.putInt(KEY_RESULT_ADAPTER_POSITION, 0).commit();
         Fragment fragment = new StartFragment();
 
-        String stateString = sharedPrefs.getString("mode", null);
+        String stateString = sharedPrefs.getString(KEY_MODE, null);
         if(stateString==null)
             stateString = "";
 
         Bundle bundle = new Bundle();
-        bundle.putBoolean("interrupted", stateString.equals(Mode.TESTING.name()) || mode.equals(Mode.TESTING) || sharedPrefs.getBoolean("interrupted", false));
-        Log.i("TAG21", "test" );
-        Log.i("TAG21", mode.equals(Mode.TESTING)+"");
-        Log.i("TAG21",sharedPrefs.getBoolean("interrupted", false)+"");
+        bundle.putBoolean(KEY_INTERRUPTED, stateString.equals(Mode.TESTING.name()) || mode.equals(Mode.TESTING) || sharedPrefs.getBoolean(KEY_INTERRUPTED, false));
         fragment.setArguments(bundle);
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
@@ -175,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
             mode = Mode.START;
         }
 
-        //transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_left);
         transaction.replace(R.id.main_layout, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
@@ -188,9 +172,7 @@ public class MainActivity extends AppCompatActivity {
         if(buttons.getVisibility()==View.GONE){
             showButtons();
         }
-
         count.setText("Вопрос " + String.valueOf(position+1)+" из 61");
-
         Fragment fragment = QuestionFragment.newInstance(questions.get(position));
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setCustomAnimations(R.animator.slide_from_left, R.animator.slide_to_left);
@@ -200,12 +182,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showResult(){
-      int[] acceptance = {3, 5, 6, 8, 10, 12, 14, 15, 16, 18, 20, 23, 24, 26, 27, 29, 37, 38, 39, 40, 42, 43, 44, 45, 46, 47, 49, 51, 52, 53, 55, 56, 60};
-        int[] cooperation = {21, 25, 31, 33, 34, 35, 36};
-        int[] symbiosis = {1, 4, 7, 28, 32, 41, 58};
-        int[] control = {2, 19, 30, 48, 50, 57, 59};
-        int[] failures = {9, 11, 13, 17, 22, 54, 61};
-
         int acceptanceResult = 0;
         for (int i = 0; i < acceptance.length; i++) {
             if(mas[acceptance[i]-1]){
@@ -249,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
         hideButtons();
 
         Bundle bundle = new Bundle();
-        bundle.putIntArray("result", result);
+        bundle.putIntArray(KEY_RESULT, result);
         fragment.setArguments(bundle);
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -309,15 +285,15 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if(mode == Mode.RESULT){
             new AlertDialog.Builder(this)
-                    .setTitle("Выйти?")
-                    .setPositiveButton("Да", new DialogInterface.OnClickListener()
+                    .setTitle(R.string.exit_question)
+                    .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
                     {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             finish();
                         }
                     })
-                    .setNegativeButton("Нет", null)
+                    .setNegativeButton(R.string.no, null)
                     .show();
             return;
         }
@@ -337,22 +313,20 @@ public class MainActivity extends AppCompatActivity {
             canReturn = false;
         } else {
             new AlertDialog.Builder(this)
-                    .setTitle("Выйти?")
-                    .setMessage("Процесс будет сохранен.")
-                    .setPositiveButton("Выход", new DialogInterface.OnClickListener()
+                    .setTitle(getString(R.string.exit_question))
+                    .setMessage(R.string.process_will_save)
+                    .setPositiveButton(R.string.exit, new DialogInterface.OnClickListener()
                     {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            editor.putBoolean("interrupted", true).commit();
+                            editor.putBoolean(KEY_INTERRUPTED, true).commit();
                             saveResultOnPrefs();
                             startFragment();
                         }
 
                     })
-                    .setNegativeButton("Нет", null)
-                 //   .setNeutralButton("Закончить тест", null)
+                    .setNegativeButton(getString(R.string.no), null)
                     .show();
-            Log.i("TAG21", "back");
         }
     }
 
@@ -370,7 +344,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick(View view) {
-        Log.i("TAG21", "onAnswer" );
+        String appPackageName = getPackageName();
         switch (view.getId()){
             case R.id.exit:
                 finish();
@@ -383,36 +357,43 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.btnResume:
                 loadDataFromPrefs();
-                Log.i("TAG21", position+ "" );
-                editor.putBoolean("interrupted", false).commit();
+                editor.putBoolean(KEY_INTERRUPTED, false).commit();
                 nextQuestion();
                 showButtons();
                 break;
             case R.id.share:
-                Log.i("TAG21", "share" );
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                String shareBody = "https://play.google.com/store/apps/details?id=" + appPackageName;
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+                startActivity(Intent.createChooser(sharingIntent, "Share via"));
 
                 break;
             case R.id.rate:
-                Log.i("TAG21", "rate" );
-
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                }
                 break;
         }
 
     }
 
     private void loadDataFromPrefs() {
-        String savedResult = sharedPrefs.getString("result_string", null);
-        position = sharedPrefs.getInt("position", 0);
-        String[] result = savedResult.split(" ");
-        for (int i = 0; i < result.length; i++) {
-            mas[i] = Boolean.valueOf(result[i]);
+        String savedResult = sharedPrefs.getString(KEY_RESULT_STRING, null);
+        position = sharedPrefs.getInt(KEY_POSITION, 0);
+        if(savedResult != null) {
+            String[] result = savedResult.split(" ");
+            for (int i = 0; i < result.length; i++) {
+                mas[i] = Boolean.valueOf(result[i]);
+            }
         }
     }
 
-
     @Override
     protected void onStop() {
-        Log.i("TAG21", "onStop" );
         saveResultOnPrefs();
         super.onStop();
     }
@@ -423,33 +404,17 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < mas.length; i++) {
                 result += String.valueOf(mas[i] + " ");
             }
-            Log.i("TAG21", result );
-            editor.putString("result_string", result).apply();
-            editor.putInt("position", position).apply();
-            editor.putString("mode", mode.name()).apply();
+            editor.putString(KEY_RESULT_STRING, result).apply();
+            editor.putInt(KEY_POSITION, position).apply();
+            editor.putString(KEY_MODE, mode.name()).apply();
         } else {
-            editor.putString("mode", null).apply();
+            editor.putString(KEY_MODE, null).apply();
         }
-
-
-    }
-
-    @Override
-    protected void onRestart() {
-        Log.i("TAG21", "onRestart" );
-        super.onRestart();
-    }
-
-    @Override
-    protected void onStart() {
-        Log.i("TAG21", "onStart" );
-        super.onStart();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         if (mAdView != null)
             mAdView.resume();
     }
@@ -457,7 +422,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
         if (mAdView != null)
             mAdView.pause();
     }
@@ -465,8 +429,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.i("TAG21", "onDestroy" );
-
         if (mAdView != null)
             mAdView.destroy();
     }

@@ -11,9 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.vedmitryapps.parentrelationshiptest.Constants;
 import com.vedmitryapps.parentrelationshiptest.R;
 import com.vedmitryapps.parentrelationshiptest.fragments.adapters.ResultAdapter;
-
+import static com.vedmitryapps.parentrelationshiptest.Constants.*;
 
 public class ResultFragment extends Fragment {
 
@@ -24,11 +25,11 @@ public class ResultFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_result_main, container, false);
 
-        sharedPrefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
-        int position = sharedPrefs.getInt("resultAdapterPosition" , 0);
+        sharedPrefs = getActivity().getSharedPreferences(KEY_MODE, Context.MODE_PRIVATE);
+        int position = sharedPrefs.getInt(Constants.KEY_RESULT_ADAPTER_POSITION, 0);
 
 
-        ResultAdapter adapter = new ResultAdapter(getContext(), this.getArguments().getIntArray("result"));
+        ResultAdapter adapter = new ResultAdapter(getActivity().getBaseContext(), this.getArguments().getIntArray(KEY_RESULT));
         ViewPager viewPager = view.findViewById(R.id.resultViewPager);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(position);
@@ -39,7 +40,7 @@ public class ResultFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                sharedPrefs.edit().putInt("resultAdapterPosition", position).commit();
+                sharedPrefs.edit().putInt(KEY_RESULT_ADAPTER_POSITION, position).commit();
             }
 
             @Override
