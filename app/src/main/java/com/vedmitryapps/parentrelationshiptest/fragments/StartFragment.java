@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 
@@ -26,6 +27,9 @@ public class StartFragment extends Fragment {
         WebView webView = view.findViewById(R.id.test_description);
         webView.setBackgroundColor(Color.TRANSPARENT);
         webView.loadUrl("file:///android_asset/pages/main_page.html");
+
+        webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
 
         Button resumeButton =  view.findViewById(R.id.btnResume);
         Button startButton =  view.findViewById(R.id.btnStart);

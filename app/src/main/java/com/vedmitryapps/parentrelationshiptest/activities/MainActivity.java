@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
                 mas[position] = true;
         }
         position++;
-        if(position == 5){
+        if(position == 61){
             showResult();
             return;
         }

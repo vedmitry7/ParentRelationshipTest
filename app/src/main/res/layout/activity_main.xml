@@ -34,6 +34,7 @@
 
             <LinearLayout
                 android:visibility="gone"
+                tools:visibility="visible"
                 android:id="@+id/buttons"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
@@ -50,7 +51,7 @@
                     android:id="@+id/posBtn"
                     android:layout_marginRight="25dp"
                     android:background="@drawable/left_button_selector"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
                     android:onClick="onAnswer"
@@ -60,7 +61,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginLeft="25dp"
                     android:background="@drawable/right_button_selector"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
                     android:onClick="onAnswer"

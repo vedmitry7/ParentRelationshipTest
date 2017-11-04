@@ -23,7 +23,7 @@
             android:background="@drawable/round_button_selector"
             android:padding="10dp"
             android:text="Пройти еще раз"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content" />
 
     </RelativeLayout>
@@ -46,7 +46,7 @@
             android:background="@drawable/round_button_selector"
             android:padding="10dp"
             android:text="Поделиться приложением"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content" />
 
     </RelativeLayout>
@@ -70,7 +70,7 @@
             android:background="@drawable/round_button_selector"
             android:padding="10dp"
             android:text="Оценить"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"/>
 
     </RelativeLayout>
@@ -93,7 +93,7 @@
             android:background="@drawable/round_button_selector"
             android:padding="10dp"
             android:text="Выход"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"/>
 
     </RelativeLayout>
