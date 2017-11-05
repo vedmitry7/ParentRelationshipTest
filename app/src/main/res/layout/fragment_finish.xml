@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <RelativeLayout
         android:layout_weight="5"
         android:layout_width="match_parent"
@@ -25,22 +24,20 @@
             android:gravity="center"
             android:textColor="@android:color/black"
             android:id="@+id/btnStart"
-            android:textSize="16dp"
+            android:textSize="@dimen/text_size_16"
             android:onClick="onClick"
             android:layout_gravity="center"
             android:background="@drawable/round_button_selector"
-            android:padding="10dp"
-            android:text="Пройти еще раз"
-            android:layout_width="300dp"
+            android:padding="@dimen/button_shadow_margin_bottom"
+            android:text="@string/test_again"
+            android:layout_width="@dimen/button_finish_width"
             android:layout_height="wrap_content" />
-
     </RelativeLayout>
 
 
     <RelativeLayout
         android:layout_weight="1"
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content">
         <Button
             android:layout_centerVertical="true"
@@ -48,14 +45,13 @@
             android:gravity="center"
             android:textColor="@android:color/black"
             android:id="@+id/share"
-            android:textSize="16dp"
+            android:textSize="@dimen/text_size_16"
             android:onClick="onClick"
             android:layout_gravity="center"
             android:background="@drawable/round_button_selector"
-            android:padding="10dp"
-            android:text="Поделиться приложением"
-            android:layout_width="300dp"
-
+            android:padding="@dimen/button_shadow_margin_bottom"
+            android:text="@string/share_this_app"
+            android:layout_width="@dimen/button_finish_width"
             android:layout_height="wrap_content" />
 
     </RelativeLayout>
@@ -64,22 +60,20 @@
     <RelativeLayout
         android:layout_weight="1"
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content">
 
         <Button
-
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:textColor="@android:color/black"
             android:id="@+id/rate"
-            android:textSize="16dp"
+            android:textSize="@dimen/text_size_16"
             android:onClick="onClick"
             android:layout_gravity="center"
             android:background="@drawable/round_button_selector"
-            android:padding="10dp"
-            android:text="Оценить"
-            android:layout_width="300dp"
+            android:padding="@dimen/button_shadow_margin_bottom"
+            android:text="@string/rate"
+            android:layout_width="@dimen/button_finish_width"
             android:layout_height="wrap_content"/>
 
     </RelativeLayout>
@@ -96,19 +90,16 @@
             android:layout_centerHorizontal="true"
             android:textColor="@android:color/black"
             android:id="@+id/exit"
-            android:textSize="16dp"
+            android:textSize="@dimen/text_size_16"
             android:onClick="onClick"
             android:layout_gravity="center"
             android:background="@drawable/round_button_selector"
-            android:padding="10dp"
-            android:text="Выход"
-            android:layout_width="300dp"
-
+            android:padding="@dimen/button_shadow_margin_bottom"
+            android:text="@string/exit"
+            android:layout_width="@dimen/button_finish_width"
             android:layout_height="wrap_content"/>
 
     </RelativeLayout>
-
-
 
 
 </LinearLayout>

@@ -104,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
         mainLayout = findViewById(R.id.main_layout);
 
         mAdView = findViewById(R.id.adView);
-        mAdView = findViewById(R.id.adView);
         mAdView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
@@ -350,8 +349,10 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.btnStart:
+                editor.putInt(KEY_RESULT_ADAPTER_POSITION, 0).commit();
                 position = 0;
                 mas = new boolean[61];
+                saveResultOnPrefs();
                 nextQuestion();
                 showButtons();
                 break;

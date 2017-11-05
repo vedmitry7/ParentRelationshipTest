@@ -2,6 +2,7 @@
     <string name="app_name">Тест Родительского Отношения</string>
     <string name="app">ca-app-pub-2209532931509792~8237981357</string>
     <string name="app_name2">ca-app-pub-2209532931509792/2848610227</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 
     <string-array name="questions">
         <item>Я всегда сочувствую своему ребенку.</item>
@@ -83,11 +84,13 @@
     <string name="start">Начать</string>
     <string name="continue_test">Продолжить</string>
 
-    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="exit_question">Выйти?</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
     <string name="process_will_save">Процесс будет сохранен.</string>
     <string name="exit">Выход</string>
+    <string name="share_this_app">Поделиться приложением</string>
+    <string name="rate">Оценить</string>
+    <string name="test_again">Пройти еще раз</string>
 
 </resources>

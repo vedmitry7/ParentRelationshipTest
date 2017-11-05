@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,10 @@ import android.view.ViewGroup;
 import com.vedmitryapps.parentrelationshiptest.Constants;
 import com.vedmitryapps.parentrelationshiptest.R;
 import com.vedmitryapps.parentrelationshiptest.fragments.adapters.ResultAdapter;
-import static com.vedmitryapps.parentrelationshiptest.Constants.*;
+
+import static com.vedmitryapps.parentrelationshiptest.Constants.KEY_PREFS;
+import static com.vedmitryapps.parentrelationshiptest.Constants.KEY_RESULT;
+import static com.vedmitryapps.parentrelationshiptest.Constants.KEY_RESULT_ADAPTER_POSITION;
 
 public class ResultFragment extends Fragment {
 
@@ -27,7 +31,6 @@ public class ResultFragment extends Fragment {
 
         sharedPrefs = getActivity().getSharedPreferences(KEY_PREFS, Context.MODE_PRIVATE);
         int position = sharedPrefs.getInt(Constants.KEY_RESULT_ADAPTER_POSITION, 0);
-
 
         ResultAdapter adapter = new ResultAdapter(getActivity().getBaseContext(), this.getArguments().getIntArray(KEY_RESULT));
         ViewPager viewPager = view.findViewById(R.id.resultViewPager);

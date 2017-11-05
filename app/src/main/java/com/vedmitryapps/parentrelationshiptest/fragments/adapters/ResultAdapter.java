@@ -11,6 +11,7 @@ import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
+import com.vedmitryapps.parentrelationshiptest.Constants;
 import com.vedmitryapps.parentrelationshiptest.R;
 
 public class ResultAdapter extends PagerAdapter {
@@ -47,7 +48,7 @@ public class ResultAdapter extends PagerAdapter {
         switch (position){
             case 0:
                 name.setText(context.getString(R.string.acceptance));
-                result.setText("Ваш результат - " + this.result[0] + " из " + 33 );
+                result.setText(String.format("Ваш результат - %s  из %d", this.result[0], Constants.acceptance.length));
                 progress.setMax(33);
                 progress.setSecondaryProgress(33);
                 progress.setProgress(this.result[0]);
@@ -56,7 +57,7 @@ public class ResultAdapter extends PagerAdapter {
                 break;
             case 1:
                 name.setText(context.getString(R.string.cooperation));
-                result.setText("Ваш результат - " + this.result[1] + " из " + 8 );
+                result.setText(String.format("Ваш результат - %s  из %d", this.result[1], Constants.cooperation.length));
                 progress.setMax(8);
                 progress.setSecondaryProgress(8);
                 progress.setProgress(this.result[1]);
@@ -65,7 +66,7 @@ public class ResultAdapter extends PagerAdapter {
                 break;
             case 2:
                 name.setText(context.getString(R.string.symbiosis));
-                result.setText("Ваш результат - " + this.result[2] + " из " + 7 );
+                result.setText(String.format("Ваш результат - %s  из %d", this.result[2], Constants.symbiosis.length));
                 progress.setMax(7);
                 progress.setSecondaryProgress(7);
                 progress.setProgress(this.result[2]);
@@ -74,7 +75,7 @@ public class ResultAdapter extends PagerAdapter {
                 break;
             case 3:
                 name.setText(context.getString(R.string.control));
-                result.setText("Ваш результат - " + this.result[3] + " из " + 7 );
+                result.setText(String.format("Ваш результат - %s  из %d", this.result[3], Constants.control.length));
                 progress.setMax(7);
                 progress.setSecondaryProgress(7);
                 progress.setProgress(this.result[3]);
@@ -83,7 +84,7 @@ public class ResultAdapter extends PagerAdapter {
                 break;
             case 4:
                 name.setText(context.getString(R.string.failures));
-                result.setText("Ваш результат - " + this.result[4] + " из " + 7 );
+                result.setText(String.format("Ваш результат - %s  из %d", this.result[4], Constants.failures.length));
                 progress.setMax(7);
                 progress.setSecondaryProgress(7);
                 progress.setProgress(this.result[4]);
